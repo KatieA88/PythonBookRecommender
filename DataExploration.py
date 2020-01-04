@@ -3,6 +3,7 @@
 #IMPORT LIBRARIES
 import pandas as pd 
 import matplotlib.pyplot as plt
+import numpy as np
 
 #%%
 
@@ -112,3 +113,17 @@ print(booktags['tag_id'].nunique())
 #which tags are most used?
 tag_freq=booktags.groupby('tag_id').count().sort_values('count',ascending=False)['count']
 print(tags[tags['tag_id'].isin(list(tag_freq.index[:20]))])
+
+plt.figure()
+plt.plot(list(tag_freq))
+plt.yscale('log')
+plt.xlabel('tag ids')
+plt.ylabel('Counts per tag_id')
+plt.title('Distribution of tag_ids')
+plt.show()
+
+print(np.cumsum(tag_freq).iloc[200] / sum(tag_freq))
+
+#there are c. 34k unique tags used and the top 100 account for around 50% of total tags. Most of the tags will not be useful for recommendations, e.g. books-i-own, kindle
+
+popular_tags=tags[tags['tag_id'].isin(list(tag_freq.index[:200]))]
